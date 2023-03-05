@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+group 'eawangja.tech.app2'
+version '1.0-SNAPSHOT'
+
+mainClassName= 'eawangja.tech.app2.Main'
+
+jar {
+    manifest {
+        attributes 'Main-Class': 'eawangja.tech.app1.Main'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
+    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
+
+    //Javalin Dependency
+    implementation 'io.javalin:javalin:5.3.2'
+
+    //manejo de log.
+    implementation 'org.slf4j:slf4j-simple:2.0.3'
+
+    /* https://mvnrepository.com/artifact/com.j2html/j2html
+     J2html Dependency*/
+    implementation 'com.j2html:j2html:1.6.0'
+
+    //Tamplate library
+    implementation 'org.thymeleaf:thymeleaf:3.1.1.RELEASE'
+
+    //Javalin render
+    implementation 'io.javalin:javalin-rendering:5.3.2'
+}
+
+shadowJar{
+    archiveBaseName.set("app")
+    archiveClassifier.set('')
+    archiveVersion.set('')
+}
+
+/**
+ * tarea necesaria para heroku si optamos por la tarea de Shadowjar
+ * en el archivo Procfile debe estar el siguiente comando:
+ * web: java -jar build/libs/app.jar
+ */
+task stage {
+    dependsOn shadowJar
+}
+test {
+    useJUnitPlatform()
+}
